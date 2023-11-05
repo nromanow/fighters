@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "553614635634",
+    "project_id": "fight-club-f6054",
+    "storage_bucket": "fight-club-f6054.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553614635634:ios:f2e5e7e81253b925dd48eb",
+        "android_client_info": {
+          "package_name": "com.devcom.fightclub"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHE5CW2nQDmLcXh50GPtoP5gvKXVPK3ZQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

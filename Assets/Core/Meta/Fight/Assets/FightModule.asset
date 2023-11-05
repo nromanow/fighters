@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878f7584823640969de3862e90298b46, type: 3}
+  m_Name: FightModule
+  m_EditorClassIdentifier: 
+  _uiSettings:
+    _fightHUDForm: {fileID: 11400000, guid: c0ff115304e978d46ab9750a6f288888, type: 2}
+    _postMatchScreenForm: {fileID: 11400000, guid: 6e1423210ff7817458e88a0f710daca9, type: 2}

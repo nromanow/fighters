@@ -1,7 +1,7 @@
 ﻿using Core.Meta.Menu.UI.Api;
 using Core.Meta.Menu.UI.ViewModels;
-using Core.Meta.UI.Api;
-using Core.Meta.UI.Data.Forms;
+using Core.UI.Api;
+using Core.UI.Data.Forms;
 using System;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 ﻿using Core.Meta.Fight.UI.Api;
 using Core.Meta.Fight.UI.ViewModels;
-using Core.Meta.UI.Api;
-using Core.Meta.UI.Data.Forms;
+using Core.UI.Api;
+using Core.UI.Data.Forms;
 using System;
 using UnityEngine;
 

@@ -13,10 +13,14 @@ namespace Core.AppProxy.WView.App {
 			wView.OnOrientationChanged += (view, orientation) => {
 				view.Frame = new Rect(0, 0, Screen.width, Screen.height);
 			};
-			
-			wView.SetAllowFileAccess(true);
-			wView.SetAcceptThirdPartyCookies(true);
-			
+
+			wView.OnLoadingErrorReceived += (view, code, message, payload) => {
+				var url = view.Url;
+				
+				view.Stop();
+				view.Load(url);
+			};
+
 			UnityEngine.Object.DontDestroyOnLoad(wViewObject);
 			
 			componentRegistry.Register(wView);

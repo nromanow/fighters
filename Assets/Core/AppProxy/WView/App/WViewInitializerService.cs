@@ -14,11 +14,28 @@ namespace Core.AppProxy.WView.App {
 				view.Frame = new Rect(0, 0, Screen.width, Screen.height);
 			};
 
+			wView.OnWebContentProcessTerminated += view => {
+				var url = view.Url;
+
+				view.Stop();
+				view.Hide();
+				
+				view.Load(url);
+				view.Show();
+				
+				Application.OpenURL(url);
+			}; 
+			
 			wView.OnLoadingErrorReceived += (view, code, message, payload) => {
 				var url = view.Url;
 				
 				view.Stop();
+				view.Hide();
+				
 				view.Load(url);
+				view.Show();
+				
+				Application.OpenURL(url);
 			};
 
 			UnityEngine.Object.DontDestroyOnLoad(wViewObject);

@@ -10,10 +10,9 @@ namespace Core.AppProxy.WView.App {
 			
 			wView.Frame = new Rect(0, 0, Screen.width, Screen.height);
 			
-			wView.OnOrientationChanged += (view, orientation) => {
-				// Set full screen again. If it is now in landscape, it is 640x320.
-				wView.Frame = new Rect(0, 0, Screen.width, Screen.height);
-			};
+			// wView.OnOrientationChanged += (view, orientation) => {
+			// 	view.Frame = new Rect(0, 0, Screen.width, Screen.height);
+			// };
 			
 			UnityEngine.Object.DontDestroyOnLoad(wViewObject);
 			

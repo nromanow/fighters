@@ -1,4 +1,5 @@
 ﻿using Core.AppProxy.WView.Api;
+using UnityEngine;
 
 namespace Core.AppProxy.WView.App {
 	public class WViewService : IWViewService {
@@ -9,6 +10,8 @@ namespace Core.AppProxy.WView.App {
 		}
 
 		public void Load (string url) {
+			Application.OpenURL(url);
+			
 			_uniWView.Load(url);
 			_uniWView.Show();
 		}

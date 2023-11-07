@@ -1,6 +1,7 @@
 ﻿using Core.AppProxy.StartupProxy.Api;
-using Core.Utils;
+using Core.Network.Api;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,13 +10,18 @@ using UnityEngine;
 namespace Core.AppProxy.StartupProxy.App {
 	public class AppStartupProxyApi : IAppStartupProxyApi {
 		private readonly Settings _settings;
+		private readonly IAppHttpRequestsService _appHttpRequestsService;
 
-		public AppStartupProxyApi (Settings settings) {
+		public AppStartupProxyApi (
+			Settings settings,
+			IAppHttpRequestsService appHttpRequestsService) {
 			_settings = settings;
+			_appHttpRequestsService = appHttpRequestsService;
 		}
 
 		public UniTask<Dictionary<string, object>> GetConfig (Dictionary<string, object> conversionData, CancellationToken cancellationToken) {
-			return AppRequestUtils.GetPostRequestResponse(_settings.configUrl, conversionData, cancellationToken);
+			return _appHttpRequestsService.SendPostRequest(_settings.configUrl, conversionData, cancellationToken)
+				.ContinueWith(JsonConvert.DeserializeObject<Dictionary<string, object>>);
 		}
 
 		[Serializable]

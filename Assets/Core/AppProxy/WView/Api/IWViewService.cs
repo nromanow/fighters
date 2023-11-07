@@ -1,5 +1,10 @@
-﻿namespace Core.AppProxy.WView.Api {
+﻿using UniRx;
+
+namespace Core.AppProxy.WView.Api {
 	public interface IWViewService {
-		void Load (string url);
+		ReactiveCommand windowLoaded { get; }
+		
+		void LoadWindow (string url);
+		void ShowWindow ();
 	}
 }

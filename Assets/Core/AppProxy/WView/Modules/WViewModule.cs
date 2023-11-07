@@ -12,11 +12,8 @@ namespace Core.AppProxy.WView.Modules {
 			componentRegistry
 				.Instantiate<WViewInitializerService>()
 				.Initialize(componentRegistry);
-
-			//TODO:Remove later
-			componentRegistry
-				.Instantiate<WViewService>()
-				.Load("https://benioosn.com/sTpWMd");
+			
+			componentRegistry.Instantiate<WViewService>();
 		}
 	}
 }

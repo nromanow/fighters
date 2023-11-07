@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,22 +19,27 @@ namespace Core.Utils {
 
 			request.SetRequestHeader("Content-Type", "application/json");
 
+			Debug.Log($"income data: {JsonConvert.SerializeObject(data)}");
+			Debug.Log($"Request sent {JsonConvert.SerializeObject(request)}");
+			
 			await request.SendWebRequest();
 
 			while (!request.isDone) {
 				if (cancellationToken.IsCancellationRequested) {
-					Debug.Log("Task {0} cancelled");
 					cancellationToken.ThrowIfCancellationRequested();
 				}
 				await UniTask.Yield();
 			}
 			
 			if (request.error != null) {
-				throw new Exception(request.error);
+				var ex = new Exception(request.error);
+				Debug.LogException(ex);
+
+				throw ex;
 			}
 			
 			var response = request.downloadHandler.text;
-			var responseDictionary = JsonUtility.FromJson<Dictionary<string, object>>(response);
+			var responseDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
 			
 			return responseDictionary;
 		}

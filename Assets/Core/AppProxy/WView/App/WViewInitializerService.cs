@@ -1,46 +1,56 @@
 ﻿using Core.App;
 using Core.AppProxy.WView.Api;
+using Newtonsoft.Json;
+using System;
 using UnityEngine;
 
 namespace Core.AppProxy.WView.App {
-	public class WViewInitializerService : IWViewInitializerService {
+	public class WViewInitializerService : IWViewInitializerService, IDisposable {
+		private UniWebView _wView;
+		
 		public void Initialize (AppComponentRegistry componentRegistry) {
+			UniWebView.SetJavaScriptEnabled(true);
+			UniWebView.SetAllowJavaScriptOpenWindow(true);
+			
+			UniWebView.SetAllowAutoPlay(true);
+			UniWebView.SetAllowInlinePlay(true);
+			
 			var wViewObject = new GameObject("WView");
-			var wView = wViewObject.AddComponent<UniWebView>();
+			_wView = wViewObject.AddComponent<UniWebView>();
 			
-			wView.Frame = new Rect(0, 0, Screen.width, Screen.height);
-			
-			wView.OnOrientationChanged += (view, orientation) => {
-				view.Frame = new Rect(0, 0, Screen.width, Screen.height);
-			};
+			SetOrientation(_wView, Screen.orientation);
 
-			wView.OnWebContentProcessTerminated += view => {
-				var url = view.Url;
-
-				view.Stop();
-				view.Hide();
-				
-				view.Load(url);
-				view.Show();
-				
-				Application.OpenURL(url);
-			}; 
+			_wView.OnOrientationChanged += SetOrientation;
+			_wView.OnLoadingErrorReceived += OnLoadingErrorReceived;
 			
-			wView.OnLoadingErrorReceived += (view, code, message, payload) => {
-				var url = view.Url;
-				
-				view.Stop();
-				view.Hide();
-				
-				view.Load(url);
-				view.Show();
-				
-				Application.OpenURL(url);
-			};
+			_wView.SetBackButtonEnabled(true);
+			_wView.SetAllowBackForwardNavigationGestures(true);
 
 			UnityEngine.Object.DontDestroyOnLoad(wViewObject);
 			
-			componentRegistry.Register(wView);
+			componentRegistry.Register(_wView);
+		}
+
+		private static void SetOrientation (UniWebView view, ScreenOrientation orientation) {
+			Debug.Log($"Safe Area: {JsonUtility.ToJson(Screen.safeArea)}");
+			
+			view.Frame = orientation switch {
+				ScreenOrientation.Portrait => Screen.safeArea,
+				ScreenOrientation.LandscapeLeft => Screen.safeArea,
+				ScreenOrientation.LandscapeRight => Screen.safeArea,
+				_ => view.Frame,
+			};
+		}
+		
+		private static void OnLoadingErrorReceived (UniWebView view, int code, string message, UniWebViewNativeResultPayload payload) {
+			Debug.Log($"WView error: {code}, {message}, {JsonConvert.SerializeObject(Screen.safeArea)}");
+			
+			view.Load((string)payload.Extra["failingURL"]);
+		}
+		
+		public void Dispose() {
+			_wView.OnOrientationChanged -= SetOrientation;
+			_wView.OnLoadingErrorReceived -= OnLoadingErrorReceived;
 		}
 	}
 }

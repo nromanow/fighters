@@ -1,5 +1,8 @@
-﻿namespace Core.AppProxy.StartupProxy.Api {
+﻿using Cysharp.Threading.Tasks;
+using System.Threading;
+
+namespace Core.AppProxy.StartupProxy.Api {
 	public interface IAppStartupProxy {
-		void Startup ();
+		UniTask Startup (CancellationToken cancellationToken);
 	}
 }

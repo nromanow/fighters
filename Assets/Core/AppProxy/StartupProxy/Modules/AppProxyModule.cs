@@ -1,5 +1,6 @@
 ﻿using Core.App;
 using Core.AppProxy.StartupProxy.App;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Core.AppProxy.StartupProxy.Modules {
@@ -15,7 +16,8 @@ namespace Core.AppProxy.StartupProxy.Modules {
 			
 			componentRegistry
 				.Instantiate<AppStartupProxy>()
-				.Startup();
+				.Startup(moduleCancellationTokenSource.Token)
+				.Forget(Debug.LogException);
 		}
 	}
 }

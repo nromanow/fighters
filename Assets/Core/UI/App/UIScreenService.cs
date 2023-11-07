@@ -12,7 +12,7 @@ namespace Core.UI.App {
 			_layers = layers;
 		}
 
-		public void ShowForm<T> (GUIForm form, T item = default) {
+		public void ShowForm<T> (GUIForm form, T item = default) where T : class {
 			GetLayer(form.layerType)
 				.CreateFormInstance(form, item);
 		}

@@ -12,7 +12,6 @@ namespace Core.Network.App {
 	public class AppHttpRequestsService : IAppHttpRequestsService {
 		public async UniTask<string> SendPostRequest (string url, Dictionary<string, object> body, CancellationToken cancellationToken) {
 			using var request = new UnityWebRequest(url, "POST");
-
 			var bodyRaw = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(body));
 			
 			request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -20,7 +19,10 @@ namespace Core.Network.App {
 			
 			request.SetRequestHeader("Content-Type", "application/json");
 			
-			Debug.Log($"Request sent {JsonConvert.SerializeObject(request)}");
+			Debug.Log($"Request"
+				+ $"\n[URL]: [{request.url}]"
+				+ $"\n[UPLOAD DATA]: [{Encoding.UTF8.GetString(request.uploadHandler.data)}]"
+				+ $"\n[METHOD]: [{request.method}]");
 
 			await request.SendWebRequest();
 

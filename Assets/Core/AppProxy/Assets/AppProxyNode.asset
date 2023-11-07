@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AppProxyNode
   m_EditorClassIdentifier: 
   _modules:
+  - {fileID: 11400000, guid: c96683542aa274ea191399a6d4f8fb72, type: 2}
   - {fileID: 11400000, guid: a8572f85d10d8674f97d2f6c9e8b20e6, type: 2}
   - {fileID: 11400000, guid: 685bb572487a4463cb8a80cdeb371408, type: 2}
   - {fileID: 11400000, guid: fea7de90e075d4f169f3b02baf513b60, type: 2}

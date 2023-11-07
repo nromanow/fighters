@@ -12,7 +12,7 @@ namespace Core.Utils {
 		public static async UniTask<Dictionary<string, object>> GetPostRequestResponse (string url, Dictionary<string, object> data, CancellationToken cancellationToken) {
 			using var request = new UnityWebRequest(url, "POST");
 
-			var bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
+			var bodyRaw = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
 
 			request.uploadHandler = new UploadHandlerRaw(bodyRaw);
 			request.downloadHandler = new DownloadHandlerBuffer();

@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea14060a8e4a44f2a8c89a49e93b7079, type: 3}
-  m_Name: MenuMetaModule
+  m_Script: {fileID: 11500000, guid: 2a2d20f66d6b449cb27bef436c69fdc2, type: 3}
+  m_Name: NotificationsModule
   m_EditorClassIdentifier: 
   _uiSettings:
-    _menuScreenReference: {fileID: 11400000, guid: 377d8be8ebf83c34baa1177ae00dca32, type: 2}
-  _menuScreenSettings:
-    _privacyPolicyUrl: https://fightclubb.com/privacy-policy.html
+    _permissionScreenReference: {fileID: 11400000, guid: 919e3a1978a284e06bdbc2ab46434073, type: 2}

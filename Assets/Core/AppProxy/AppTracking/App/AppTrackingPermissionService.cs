@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Core.AppProxy.AppTracking.App {
 	public class AppTrackingPermissionService : IAppTrackingPermissionService {
+		public bool hasPermission => ATTrackingStatusBinding.GetAuthorizationTrackingStatus()
+			== ATTrackingStatusBinding.AuthorizationTrackingStatus.AUTHORIZED;
+		
 		public async UniTask RequestPermission (CancellationToken cancellationToken) {
 #if UNITY_IOS
 			// Check with iOS to see if the user has accepted or declined tracking

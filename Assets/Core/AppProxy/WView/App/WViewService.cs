@@ -5,6 +5,9 @@ using UniRx;
 namespace Core.AppProxy.WView.App {
 	public class WViewService : IWViewService, IDisposable {
 		public ReactiveCommand windowLoaded { get; } = new();
+		public IReadOnlyReactiveProperty<bool> isLoadInit => _isLoadInit;
+		
+		private readonly ReactiveProperty<bool> _isLoadInit = new();
 		
 		private readonly UniWebView _uniWView;
 
@@ -16,6 +19,8 @@ namespace Core.AppProxy.WView.App {
 
 		public void LoadWindow (string url) {
 			_uniWView.Load(url);
+			
+			_isLoadInit.Value = true;
 		}
 		
 		public void ShowWindow () {
@@ -28,7 +33,8 @@ namespace Core.AppProxy.WView.App {
 
 		public void Dispose() {
 			windowLoaded?.Dispose();
-
+			
+			_isLoadInit?.Dispose();
 			_uniWView.OnPageFinished -= OnPageLoaded;
 		}
 	}

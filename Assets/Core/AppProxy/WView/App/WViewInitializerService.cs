@@ -1,6 +1,5 @@
 ﻿using Core.App;
 using Core.AppProxy.WView.Api;
-using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
@@ -32,7 +31,7 @@ namespace Core.AppProxy.WView.App {
 		}
 
 		private static void SetOrientation (UniWebView view, ScreenOrientation orientation) {
-			Debug.Log($"Safe Area: {JsonUtility.ToJson(Screen.safeArea)}");
+			Debug.Log($"Safe Area: width - {Screen.safeArea.width}, height - {Screen.safeArea.height}");
 			
 			view.Frame = orientation switch {
 				ScreenOrientation.Portrait => Screen.safeArea,
@@ -43,7 +42,7 @@ namespace Core.AppProxy.WView.App {
 		}
 		
 		private static void OnLoadingErrorReceived (UniWebView view, int code, string message, UniWebViewNativeResultPayload payload) {
-			Debug.Log($"WView error: {code}, {message}, {JsonConvert.SerializeObject(Screen.safeArea)}");
+			Debug.Log($"WView error: {code}, {message}");
 			
 			view.Load((string)payload.Extra["failingURL"]);
 		}

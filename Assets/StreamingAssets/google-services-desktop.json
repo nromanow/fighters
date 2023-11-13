@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:553614635634:ios:f2e5e7e81253b925dd48eb",
+        "mobilesdk_app_id": "1:553614635634:ios:5d0d41df30071eecdd48eb",
         "android_client_info": {
-          "package_name": "com.devcom.fightclub"
+          "package_name": "com.devcom.fighters"
         }
       },
       "api_key": [

@@ -5,12 +5,11 @@ using UnityEngine;
 
 namespace Core.AppProxy.WView.App {
 	public class WViewInitializerService : IWViewInitializerService, IDisposable {
+		private const float SCREEN_UPPER_INDENT = 20f;
+		
 		private UniWebView _wView;
 		
 		public void Initialize (AppComponentRegistry componentRegistry) {
-			UniWebView.SetJavaScriptEnabled(true);
-			UniWebView.SetAllowJavaScriptOpenWindow(true);
-			
 			UniWebView.SetAllowAutoPlay(true);
 			UniWebView.SetAllowInlinePlay(true);
 			
@@ -21,6 +20,7 @@ namespace Core.AppProxy.WView.App {
 
 			_wView.OnOrientationChanged += SetOrientation;
 			_wView.OnLoadingErrorReceived += OnLoadingErrorReceived;
+			_wView.OnWebContentProcessTerminated += OnPageTerminated;
 			
 			_wView.SetBackButtonEnabled(true);
 			_wView.SetAllowBackForwardNavigationGestures(true);
@@ -34,9 +34,9 @@ namespace Core.AppProxy.WView.App {
 			Debug.Log($"Safe Area: width - {Screen.safeArea.width}, height - {Screen.safeArea.height}");
 			
 			view.Frame = orientation switch {
-				ScreenOrientation.Portrait => Screen.safeArea,
-				ScreenOrientation.LandscapeLeft => Screen.safeArea,
-				ScreenOrientation.LandscapeRight => Screen.safeArea,
+				ScreenOrientation.Portrait => new Rect(Screen.safeArea.x, Screen.safeArea.y + SCREEN_UPPER_INDENT, Screen.safeArea.width, Screen.safeArea.height),
+				ScreenOrientation.LandscapeLeft => new Rect(Screen.safeArea.x + SCREEN_UPPER_INDENT, 0, Screen.safeArea.width, Screen.safeArea.height),
+				ScreenOrientation.LandscapeRight => new Rect(Screen.safeArea.x - SCREEN_UPPER_INDENT, 0, Screen.safeArea.width, Screen.safeArea.height),
 				_ => view.Frame,
 			};
 		}
@@ -47,9 +47,16 @@ namespace Core.AppProxy.WView.App {
 			view.Load((string)payload.Extra["failingURL"]);
 		}
 		
+		private static void OnPageTerminated (UniWebView webview) {
+			webview.Stop();
+			webview.Reload();
+			webview.Show();
+		}
+		
 		public void Dispose() {
 			_wView.OnOrientationChanged -= SetOrientation;
 			_wView.OnLoadingErrorReceived -= OnLoadingErrorReceived;
+			_wView.OnWebContentProcessTerminated -= OnPageTerminated;
 		}
 	}
 }

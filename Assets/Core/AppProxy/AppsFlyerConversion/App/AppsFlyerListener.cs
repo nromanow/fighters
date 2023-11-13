@@ -1,19 +1,22 @@
 ﻿using AppsFlyerSDK;
 using Core.AppProxy.AppsFlyerConversion.Api;
+using System;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
 namespace Core.AppProxy.AppsFlyerConversion.App {
-	public class AppsFlyerListener : MonoBehaviour, IAppsFlyerListener, IAppsFlyerConversionData {
+	public class AppsFlyerListener : MonoBehaviour, IAppsFlyerListener, IAppsFlyerConversionData, IDisposable {
 		public ReactiveCommand<Dictionary<string, object>> onConversionDataReceived { get; } = new();
 		public ReactiveCommand onConversionDataFailed { get; } = new();
 
 		public void onConversionDataSuccess (string conversionData) {
 			AppsFlyer.AFLog("onConversionDataSuccess", conversionData);
+
+			var data = AppsFlyer.CallbackStringToDictionary(conversionData);
 			
 			onConversionDataReceived
-				.Execute(AppsFlyer.CallbackStringToDictionary(conversionData));
+				.Execute(data);
 		}
 
 		public void onConversionDataFail (string error) {
@@ -32,6 +35,11 @@ namespace Core.AppProxy.AppsFlyerConversion.App {
 		private void OnDestroy () {
 			onConversionDataReceived.Dispose();
 			onConversionDataFailed.Dispose();
+		}
+
+		public void Dispose () {
+			onConversionDataReceived?.Dispose();
+			onConversionDataFailed?.Dispose();
 		}
 	}
 }

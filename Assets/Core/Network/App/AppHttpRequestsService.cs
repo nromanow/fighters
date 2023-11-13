@@ -1,7 +1,6 @@
 using Core.Network.Api;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -24,7 +23,7 @@ namespace Core.Network.App {
 				+ $"\n[UPLOAD DATA]: [{Encoding.UTF8.GetString(request.uploadHandler.data)}]"
 				+ $"\n[METHOD]: [{request.method}]");
 
-			await request.SendWebRequest();
+			request.SendWebRequest();
 
 			while (!request.isDone) {
 				if (cancellationToken.IsCancellationRequested) {
@@ -34,13 +33,12 @@ namespace Core.Network.App {
 			}
 
 			if (request.error != null) {
-				var ex = new Exception(request.error);
-				Debug.LogException(ex);
-
-				throw ex;
+				Debug.LogError($"Request [{request.url}] error: [{request.error}]");
 			}
 
 			var response = request.downloadHandler.text;
+			
+			Debug.Log($"Response: [DATA]: [{response}]");
 
 			return response;
 		}

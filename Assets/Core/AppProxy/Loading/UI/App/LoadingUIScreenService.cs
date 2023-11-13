@@ -1,4 +1,5 @@
 using Core.AppProxy.Loading.UI.Api;
+using Core.AppProxy.Loading.UI.ViewModels;
 using Core.UI.Api;
 using Core.UI.Data.Forms;
 using System;
@@ -14,8 +15,8 @@ namespace Core.AppProxy.Loading.UI.App {
 			_uiScreenService = uiScreenService;
 		}
 
-		public void OpenLoadingScreen () {
-			_uiScreenService.ShowForm<object>(_settings.loadingScreenReference);
+		public void OpenLoadingScreen (LoadingScreenViewModel viewModel) {
+			_uiScreenService.ShowForm(_settings.loadingScreenReference, viewModel);
 		}
 
 		public void CloseLoadingScreen () {

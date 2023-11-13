@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Core.App {
 	public class AppComponentRegistry : IDisposable {
@@ -55,7 +56,11 @@ namespace Core.App {
 
 		public void Dispose () {
 			foreach (var item in _items) {
-				if (item is IDisposable disposable) disposable.Dispose();
+				if (item is IDisposable disposable) {
+					disposable.Dispose();
+					
+					Debug.Log($"{disposable.GetType()} has been disposed");
+				}
 			}
 		}
 	}

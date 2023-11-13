@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _apiSettings:
     _configUrl: https://fightclubb.com/config.php
+  _paramsSettings:
+    _firebaseProjectId: fight-club-f6054
+    _appleAppId: id6471507373

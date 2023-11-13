@@ -9,9 +9,13 @@ namespace Core.AppProxy.StartupProxy.Modules {
 		[SerializeField]
 		private AppStartupProxyApi.Settings _apiSettings;
 
+		[SerializeField]
+		private AppStartupParametersCollectService.Settings _paramsSettings;
+
 		public override void OnInitialize (AppComponentRegistry componentRegistry) {
 			base.OnInitialize(componentRegistry);
 
+			componentRegistry.Instantiate<AppStartupParametersCollectService>(_paramsSettings);
 			componentRegistry.Instantiate<AppStartupProxyApi>(_apiSettings);
 			
 			componentRegistry

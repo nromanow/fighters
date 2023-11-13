@@ -22,6 +22,8 @@ namespace Core.App {
 			}
 			
 			_componentRegistry.Dispose();
+			
+			Debug.Log($"Node [{this.name} is disposed]");
 		}
 	}
 }

@@ -38,10 +38,13 @@ namespace Core.AppProxy.Notifications.App {
 
 			viewModel.permissionExcecuted
 				.Subscribe(isAccepted => {
+					Debug.Log($"Permission for notify is [{isAccepted}]");
+					
 					if (isAccepted)
 						SetPermission();
-					
-					SetAskTime(DateTime.UtcNow.AddSeconds(259200));
+					else {
+						SetAskTime(DateTime.UtcNow.AddSeconds(259200));
+					}
 					
 					_uiScreenService.ClosePermissionScreen();
 				})
@@ -49,7 +52,7 @@ namespace Core.AppProxy.Notifications.App {
 			
 			_uiScreenService.ShowPermissionScreen(viewModel);
 
-			await viewModel.permissionExcecuted;
+			await viewModel.permissionExcecuted; 
 		}
 
 		private static bool HasPermission () {
@@ -68,7 +71,7 @@ namespace Core.AppProxy.Notifications.App {
 		}
 
 		private void SetAskTime (DateTime dateTime) {
-			PlayerPrefs.SetString(PLAYER_PREFS_NOTIFICATION_TIME_KEY, dateTime.ToString(CultureInfo.InvariantCulture));
+			PlayerPrefs.SetString(PLAYER_PREFS_NOTIFICATION_TIME_KEY, dateTime.ToString());
 			_timeAskPermissionExpired.Value = TimeAskExpiredAt() <= DateTime.UtcNow;
 		}
 

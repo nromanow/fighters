@@ -48,8 +48,8 @@ namespace Core.AppProxy.WView.App {
 		}
 		
 		private static void OnPageTerminated (UniWebView webview) {
-			webview.Stop();
-			webview.Reload();
+			webview.Hide();
+			webview.Load(webview.Url);
 			webview.Show();
 		}
 		

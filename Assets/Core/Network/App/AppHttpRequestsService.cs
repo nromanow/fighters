@@ -1,6 +1,7 @@
 using Core.Network.Api;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -21,7 +22,8 @@ namespace Core.Network.App {
 			Debug.Log($"Request"
 				+ $"\n[URL]: [{request.url}]"
 				+ $"\n[UPLOAD DATA]: [{Encoding.UTF8.GetString(request.uploadHandler.data)}]"
-				+ $"\n[METHOD]: [{request.method}]");
+				+ $"\n[METHOD]: [{request.method}]"
+				+ $"\n[TIME]: [{DateTime.UtcNow:U}]");
 
 			request.SendWebRequest();
 

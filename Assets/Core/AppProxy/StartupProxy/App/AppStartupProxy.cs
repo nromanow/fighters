@@ -31,6 +31,11 @@ namespace Core.AppProxy.StartupProxy.App {
 		private readonly CompositeDisposable _disposable = new();
 		private readonly CancellationTokenSource _progressToken = new();
 
+		private bool _isNotificationsInit;
+		private bool _isWViewInitFromPush;
+
+		private Dictionary<string, object> _cachedConversionData = new();
+
 		public AppStartupProxy (
 			IAppStartupProxyApi api,
 			ILoadingScreenService loadingScreenService,
@@ -61,6 +66,7 @@ namespace Core.AppProxy.StartupProxy.App {
 				new Progress<int>(value => progressProperty.Value = value);
 
 			SetupLoadingProgress(progress, _progressToken.Token).Forget(Debug.LogException);
+			SetupWView();
 
 			_loadingScreenService.ShowLoadingScreen(progressProperty);
 
@@ -78,18 +84,29 @@ namespace Core.AppProxy.StartupProxy.App {
 				Debug.Log($"Load old url: [{url}]");
 
 				await SetupNotifications(cancellationToken);
-				
-				SetupWView(url);
+
+				_wViewService.LoadWindow(url.ToString());
 
 				return;
 			}
 
+			_notificationsMessagesListener.pushToken
+				.Where(x => !string.IsNullOrEmpty(x))
+				.Subscribe(_ => {
+					Debug.Log($"Push token received!!!. Start init game parameters");
+					
+					SendAppParams(_cachedConversionData, cancellationToken)
+						.Forget(Debug.LogException);
+				})
+				.AddTo(_disposable);
+			
 			_appsFlyerListener.onConversionDataReceived
 				.Take(1)
 				.Subscribe(data => OnConversionDataReceived(data, cancellationToken).Forget(Debug.LogException))
 				.AddTo(_disposable);
 
 			_appsFlyerListener.onConversionDataFailed
+				.Take(1)
 				.Subscribe(_ => OnConversionDataFailed())
 				.AddTo(_disposable);
 
@@ -118,12 +135,20 @@ namespace Core.AppProxy.StartupProxy.App {
 		}
 
 		private async UniTask SetupNotifications (CancellationToken cancellationToken) {
+			if (_isNotificationsInit)
+				return;
+
+			_isNotificationsInit = true;
+
 			_notificationsPermissionService.hasPermission
 				.Subscribe(hasPermission => {
-					if (hasPermission) {
-						_notificationsMessagesListener.SubscribeOnMessageParamByKey("url", SetupWView);
-						_notificationsMessagesListener.StartListen();
-					}
+					if (!hasPermission) return;
+
+					_notificationsMessagesListener.SubscribeOnMessageParamByKey("url", url => {
+						_wViewService.LoadWindow(url);
+						_isWViewInitFromPush = true;
+					});
+					_notificationsMessagesListener.StartListen();
 				})
 				.AddTo(_disposable);
 
@@ -131,15 +156,9 @@ namespace Core.AppProxy.StartupProxy.App {
 				&& !_notificationsPermissionService.hasPermission.Value) {
 				await _notificationsPermissionService.RequestPermission(cancellationToken);
 			}
-
-			//TODO: require subscribe on notifications token updated
-			await UniTask.Delay(6000, cancellationToken: cancellationToken);
 		}
 
-		private void SetupWView (object url) {
-			if (_wViewService.isLoadInit.Value)
-				return;
-
+		private void SetupWView () {
 			_wViewService.windowLoaded
 				.Take(1)
 				.Subscribe(_ => {
@@ -147,38 +166,52 @@ namespace Core.AppProxy.StartupProxy.App {
 					_loadingScreenService.HideLoadingScreen();
 				})
 				.AddTo(_disposable);
-
-			_wViewService.LoadWindow((string)url);
 		}
 
 		private async UniTask OnConversionDataReceived (Dictionary<string, object> conversionData, CancellationToken cancellationToken) {
 			Debug.Log($"Conversion data received. Start init game parameters");
-			
+
 			if (conversionData.TryGetValue("af_status", out var status)) {
 				if (status.ToString() == "Organic") {
 					Debug.Log($"Organic install");
-					
+
 					StartGame();
 					return;
 				}
 			}
 
 			Debug.Log($"Non-organic install");
-			
+
+			_cachedConversionData = conversionData;
+
 			await SetupNotifications(cancellationToken);
+
+			var viewParams = await SendAppParams(conversionData, cancellationToken);
 			
-			await _appStartupParametersCollectService
+			LaunchAppFromParams(viewParams);
+		}
+
+		private UniTask<Dictionary<string, object>> SendAppParams (Dictionary<string, object> conversionData, CancellationToken cancellationToken) {
+			Debug.Log($"Send app params");
+			
+			Debug.Log($"Conv data: [{Newtonsoft.Json.JsonConvert.SerializeObject(conversionData)}]");
+
+			var paramsCollection = new Dictionary<string, object>();
+
+			foreach (var convPair in conversionData) {
+				paramsCollection.Add(convPair.Key, convPair.Value);
+			}
+			
+			return _appStartupParametersCollectService
 				.GetParams(cancellationToken)
 				.ContinueWith(paramsData => {
 					foreach (var param in paramsData) {
-						conversionData.Add(param.Key, param.Value);
+						paramsCollection.Add(param.Key, param.Value);
 					}
 
-					Debug.Log($"Params inited. Send config request");
-					
-					_api.GetConfig(conversionData, cancellationToken)
-						.ContinueWith(OnConfigReceived)
-						.Forget(Debug.LogException);
+					Debug.Log($"Params init. Send config request");
+
+					return _api.GetConfig(paramsCollection, cancellationToken);
 				});
 		}
 
@@ -186,18 +219,19 @@ namespace Core.AppProxy.StartupProxy.App {
 			_gameLoaderService.LoadGame();
 		}
 
-		private void OnConfigReceived (IReadOnlyDictionary<string, object> response) {
-			var okStatus = (bool)response["ok"];
+		private void LaunchAppFromParams (IReadOnlyDictionary<string, object> appParams) {
+			var okStatus = (bool)appParams["ok"];
 
 			if (okStatus) {
-				var url = (string)response["url"];
-				var expirationTimeStamp = (int)(long)response["expires"];
+				var url = (string)appParams["url"];
+				var expirationTimeStamp = (int)(long)appParams["expires"];
 
 				_appFieldsContainer.AddValue(URL_FIELD_KEY, url, expirationTimeStamp);
 
 				Debug.Log($"Load new url: {url}");
 
-				SetupWView(url);
+				if (!_isWViewInitFromPush)
+					_wViewService.LoadWindow(url);
 			}
 			else {
 				PlayerPrefs.SetInt(PLAYER_PREFS_CAN_START_APP_KEY, 1);

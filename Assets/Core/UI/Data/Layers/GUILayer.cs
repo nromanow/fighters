@@ -13,6 +13,11 @@ namespace Core.UI.Data.Layers {
 		public GUILayerType layerType => _layerType;
 
 		public void CreateFormInstance<T> (GUIForm form, T item = default) {
+			if (_formInstances.ContainsKey(form)) {
+				Debug.LogError($"Form {form.name} already instance");
+				return;
+			}
+			
 			var instance = Instantiate(form.source, transform);
 
 			if (item != null) {

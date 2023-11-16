@@ -20,7 +20,7 @@ namespace Core.AppProxy.Notifications.App {
 
 		private void OnTokenReceived (object sender, TokenReceivedEventArgs e) {
 			_pushToken.Value = e.Token;
-
+			
 			Debug.Log($"New push token: [{e.Token}]");
 		}
 

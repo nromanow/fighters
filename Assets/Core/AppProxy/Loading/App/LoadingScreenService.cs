@@ -13,9 +13,11 @@ namespace Core.AppProxy.Loading.App {
 			_uiService = uiService;
 		}
 
-		public void ShowLoadingScreen (IObservable<int> progress = default) {
+		public void ShowLoadingScreen (IObservable<int> progress = default, int staticProgress = 0) {
 			var viewModel = new LoadingScreenViewModel();
 
+			viewModel.UpdateProgress(staticProgress);
+			
 			progress?
 				.Subscribe(viewModel.UpdateProgress)
 				.AddTo(_disposable);

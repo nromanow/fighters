@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAHE5CW2nQDmLcXh50GPtoP5gvKXVPK3ZQ</string>
+	<string>AIzaSyBPlqR0_CfWoFP5yCC_37kLy9slsoK6Rnw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>553614635634</string>
+	<string>12698184056</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.devcom.fighters</string>
 	<key>PROJECT_ID</key>
-	<string>fight-club-f6054</string>
+	<string>fighters-98fbd</string>
 	<key>STORAGE_BUCKET</key>
-	<string>fight-club-f6054.appspot.com</string>
+	<string>fighters-98fbd.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:553614635634:ios:5d0d41df30071eecdd48eb</string>
+	<string>1:12698184056:ios:f03d4491a3a26e4f13408d</string>
 </dict>
 </plist>

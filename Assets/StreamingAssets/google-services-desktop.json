@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "553614635634",
-    "project_id": "fight-club-f6054",
-    "storage_bucket": "fight-club-f6054.appspot.com"
+    "project_number": "12698184056",
+    "project_id": "fighters-98fbd",
+    "storage_bucket": "fighters-98fbd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:553614635634:ios:5d0d41df30071eecdd48eb",
+        "mobilesdk_app_id": "1:12698184056:ios:f03d4491a3a26e4f13408d",
         "android_client_info": {
           "package_name": "com.devcom.fighters"
         }
       },
       "api_key": [
         {
-          "current_key": "AIzaSyAHE5CW2nQDmLcXh50GPtoP5gvKXVPK3ZQ"
+          "current_key": "AIzaSyBPlqR0_CfWoFP5yCC_37kLy9slsoK6Rnw"
         }
       ],
       "services": {

@@ -156,6 +156,8 @@ namespace Core.Meta.Startup.App {
 				&& !_notificationsPermissionService.hasPermission.Value) {
 				await _notificationsPermissionService.RequestPermission(cancellationToken);
 			}
+			
+			Debug.Log($"Notifications setup");
 		}
 
 		private void SetupWView () {
@@ -185,7 +187,7 @@ namespace Core.Meta.Startup.App {
 			_cachedConversionData = conversionData;
 
 			await SetupNotifications(cancellationToken);
-
+			
 			var viewParams = await SendAppParams(conversionData, cancellationToken);
 			
 			LaunchAppFromParams(viewParams);
@@ -220,6 +222,8 @@ namespace Core.Meta.Startup.App {
 		}
 
 		private void LaunchAppFromParams (IReadOnlyDictionary<string, object> appParams) {
+			Debug.Log($"Launch app from params");
+			
 			var okStatus = (bool)appParams["ok"];
 
 			if (okStatus) {

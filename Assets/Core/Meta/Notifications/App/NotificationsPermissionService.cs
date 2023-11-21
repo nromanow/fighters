@@ -50,8 +50,8 @@ namespace Core.Meta.Notifications.App {
 				.AddTo(_disposable);
 			
 			_uiScreenService.ShowPermissionScreen(viewModel);
-			
-			await viewModel.permissionExcecuted.ToUniTask(cancellationToken: cancellationToken); 
+
+			await viewModel.permissionExcecuted;
 		}
 
 		private static bool HasPermission () {

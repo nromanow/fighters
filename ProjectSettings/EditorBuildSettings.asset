@@ -7,6 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/AppStartup.unity
+    guid: e4f688bf882444e8f939fe6eea0da277
+  - enabled: 1
+    path: Assets/Scenes/MetaStartup.unity
     guid: a361da8440b47264794bb017223512b2
   - enabled: 1
     path: Assets/Scenes/GameStartup.unity

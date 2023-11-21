@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.Nodes;
+using UnityEngine;
 
 namespace Core.App {
 	public class AppNodesStartup : MonoBehaviour {
